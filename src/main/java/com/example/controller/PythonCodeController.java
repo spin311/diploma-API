@@ -22,7 +22,7 @@ public class PythonCodeController {
     @PostMapping("/log")
     public ResponseEntity<String> log(@RequestBody PythonLogRequestDTO pythonLogRequest) {
         try {
-            String result =  pythonCodeService.downloadCode(pythonLogRequest.getId(), pythonLogRequest.getPythonCode());
+            String result =  pythonCodeService.downloadCode(pythonLogRequest);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
