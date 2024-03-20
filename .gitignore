@@ -5,3 +5,5 @@ backend/.idea/vcs.xml
 target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
 target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
 /backend/.idea/
+target/backend-1.0-SNAPSHOT.jar
+target/
