@@ -7,3 +7,4 @@ target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputF
 /backend/.idea/
 target/backend-1.0-SNAPSHOT.jar
 target/
+src/main/resources/application.properties
