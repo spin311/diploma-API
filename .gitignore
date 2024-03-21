@@ -8,3 +8,7 @@ target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputF
 target/backend-1.0-SNAPSHOT.jar
 target/
 src/main/resources/application.properties
+*.properties
+*.script
+*.lck
+*.log
