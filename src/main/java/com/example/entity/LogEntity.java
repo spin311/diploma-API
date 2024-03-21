@@ -1,8 +1,6 @@
 package com.example.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 
@@ -10,7 +8,8 @@ import java.time.LocalDateTime;
 public class LogEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LOG_ENTITY_SEQ")
+    @SequenceGenerator(name = "LOG_ENTITY_SEQ", sequenceName = "LOG_ENTITY_SEQ", allocationSize = 1)
     private Long id;
 @Column
     private String guid;
