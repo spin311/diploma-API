@@ -24,6 +24,7 @@ public class PythonCodeService {
         String pythonCode = pythonLogRequestDTO.getPythonCode();
         String guid = pythonLogRequestDTO.getId();
         String errorMessage = pythonLogRequestDTO.getErrorMessage();
+        Integer taskNumber = pythonLogRequestDTO.getTaskNumber();
 
         try {
             LogEntity logEntity = new LogEntity();
@@ -32,13 +33,14 @@ public class PythonCodeService {
             logEntity.setErrorMessage(errorMessage);
             //set timestamp to current time
             logEntity.setTimestamp(LocalDateTime.now());
+            logEntity.setTaskNumber(taskNumber);
             logEntityRepository.save(logEntity);
         } catch (Exception e) {
             e.printStackTrace();
-            return String.format("Failed to save code with id %s and code %s: %s", guid, pythonCode, e.getMessage());
+            return String.format("Failed to save task %d with id %s and code %s: %s", taskNumber, guid, pythonCode, e.getMessage());
         }
 
-            return String.format("Code with id %s, code %s and error message %s has been downloaded", guid, pythonCode,errorMessage);
+            return String.format("Task %d with id %s, code %s and error message %s has been downloaded", taskNumber, guid, pythonCode,errorMessage);
 
 
     }

@@ -4,6 +4,7 @@ public class PythonLogRequestDTO {
     private String id;
     private String pythonCode;
     private String errorMessage;
+    private Integer taskNumber;
 
     public String getId() {
         return id;
@@ -27,5 +28,13 @@ public class PythonLogRequestDTO {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public Integer getTaskNumber() {
+        return taskNumber;
+    }
+
+    public void setTaskNumber(Integer taskNumber) {
+        this.taskNumber = taskNumber;
     }
 }

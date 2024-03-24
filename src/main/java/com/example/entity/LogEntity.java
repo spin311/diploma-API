@@ -11,13 +11,15 @@ public class LogEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LOG_ENTITY_SEQ")
     @SequenceGenerator(name = "LOG_ENTITY_SEQ", sequenceName = "LOG_ENTITY_SEQ", allocationSize = 1)
     private Long id;
-@Column
+@Column(length = 36, nullable = false)
     private String guid;
-@Column
+@Column(length = 2, nullable = false)
+    private Integer taskNumber;
+@Column(length = 4096, nullable = false)
     private String code;
 @Column
     private String errorMessage;
-@Column
+@Column(nullable = false)
     private LocalDateTime timestamp;
 
     public String getCode() {
@@ -58,5 +60,13 @@ public class LogEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public Integer getTaskNumber() {
+        return taskNumber;
+    }
+
+    public void setTaskNumber(Integer taskNumber) {
+        this.taskNumber = taskNumber;
     }
 }
