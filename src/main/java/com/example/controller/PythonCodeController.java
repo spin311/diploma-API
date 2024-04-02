@@ -18,7 +18,7 @@ public class PythonCodeController {
         this.pythonCodeService = pythonCodeService;
     }
 
-    @CrossOrigin(origins = "http://localhost:63343/")
+    @CrossOrigin(origins = "*")
     @PostMapping("/log")
     public ResponseEntity<String> log(@RequestBody PythonLogRequestDTO pythonLogRequest) {
         try {

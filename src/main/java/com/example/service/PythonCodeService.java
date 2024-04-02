@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.dto.PythonLogRequestDTO;
-import com.example.entity.LogEntity;
+import com.example.entity.Log;
 import com.example.repository.LogEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,14 +27,13 @@ public class PythonCodeService {
         Integer taskNumber = pythonLogRequestDTO.getTaskNumber();
 
         try {
-            LogEntity logEntity = new LogEntity();
-            logEntity.setCode(pythonCode);
-            logEntity.setGuid(guid);
-            logEntity.setErrorMessage(errorMessage);
+            Log log = new Log();
+            log.setCode(pythonCode);
+            log.setErrorMessage(errorMessage);
             //set timestamp to current time
-            logEntity.setTimestamp(LocalDateTime.now());
-            logEntity.setTaskNumber(taskNumber);
-            logEntityRepository.save(logEntity);
+            log.setTimestamp(LocalDateTime.now());
+            log.setTaskNumber(taskNumber);
+            logEntityRepository.save(log);
         } catch (Exception e) {
             e.printStackTrace();
             return String.format("Failed to save task %d with id %s and code %s: %s", taskNumber, guid, pythonCode, e.getMessage());
