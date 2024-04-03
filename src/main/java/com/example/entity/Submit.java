@@ -7,17 +7,12 @@ import java.util.List;
 @Entity
 public class Submit {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SUBMIT_ENTITY_SEQ")
-    @SequenceGenerator(name = "SUBMIT_ENTITY_SEQ", sequenceName = "SUBMIT_ENTITY_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SUBMIT_SEQ")
+    @SequenceGenerator(name = "SUBMIT_SEQ", sequenceName = "SUBMIT_SEQ", allocationSize = 1)
     private Long submit_id;
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName="student_id", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
-
-    @Column(length = 36, nullable = false)
-    private Integer student_id;
-    @OneToMany(cascade = CascadeType.ALL)
-private List<Chat> chatEntities;
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
@@ -29,14 +24,6 @@ private List<Chat> chatEntities;
         this.submit_id = submit_id;
     }
 
-    public List<Chat> getChatEntities() {
-        return chatEntities;
-    }
-
-    public void setChatEntities(List<Chat> chatEntities) {
-        this.chatEntities = chatEntities;
-    }
-
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
@@ -45,19 +32,11 @@ private List<Chat> chatEntities;
         this.timestamp = timestamp;
     }
 
-    public Student getStudentEntity() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudentEntity(Student student) {
+    public void setStudent(Student student) {
         this.student = student;
-    }
-
-    public Integer getStudent_id() {
-        return student_id;
-    }
-
-    public void setStudent_id(Integer student_id) {
-        this.student_id = student_id;
     }
 }

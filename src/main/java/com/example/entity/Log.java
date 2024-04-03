@@ -10,10 +10,8 @@ public class Log {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LOG_SEQ")
     @SequenceGenerator(name = "LOG_SEQ", sequenceName = "LOG_SEQ", allocationSize = 1)
     private Long log_id;
-    @Column(length = 36, nullable = false)
-    private Integer student_id;
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName="student_id", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
 @Column(length = 2, nullable = false)
@@ -24,6 +22,9 @@ public class Log {
     private String errorMessage;
 @Column(nullable = false)
     private LocalDateTime timestamp;
+
+@Column
+private Boolean submitted;
 
     public String getCode() {
         return code;
@@ -57,28 +58,28 @@ public class Log {
         this.log_id = log_id;
     }
 
-    public Integer getStudent_id() {
-        return student_id;
-    }
-
-    public void setStudent_id(Integer student_id) {
-        this.student_id = student_id;
-    }
-
-    public Student getStudentEntity() {
-        return student;
-    }
-
-    public void setStudentEntity(Student student) {
-        this.student = student;
-    }
-
     public Integer getTaskNumber() {
         return taskNumber;
     }
 
     public void setTaskNumber(Integer taskNumber) {
         this.taskNumber = taskNumber;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Boolean getSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(Boolean submitted) {
+        this.submitted = submitted;
     }
 
 

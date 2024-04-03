@@ -29,15 +29,4 @@ public class Student {
     public void setGuid(String guid) {
         this.guid = guid;
     }
-
-    @OneToMany(mappedBy = "studentEntity")
-    private Collection<Log> log;
-
-    public Collection<Log> getLogEntity() {
-        return log;
-    }
-
-    public void setLogEntity(Collection<Log> log) {
-        this.log = log;
-    }
 }

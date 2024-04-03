@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.PythonLogRequestDTO;
+import com.example.dto.SubmitDTO;
 import com.example.service.PythonCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,20 @@ public class PythonCodeController {
 
 
 
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/submit")
+    public ResponseEntity<String> submit(@RequestBody SubmitDTO submitDTO) {
+        try {
+            String result = pythonCodeService.submitCode(submitDTO);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to log Python code: " + e.getMessage());
+
+        }
     }
 
     @GetMapping("/hello")

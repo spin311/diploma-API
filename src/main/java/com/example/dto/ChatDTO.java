@@ -1,27 +1,22 @@
-package com.example.entity;
-import jakarta.persistence.*;
+package com.example.dto;
+
 import java.time.LocalDateTime;
-@Entity
-public class Chat {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CHAT_SEQ")
-    @SequenceGenerator(name = "CHAT_SEQ", sequenceName = "CHAT_SEQ", allocationSize = 1)
-    private Long chat_id;
-
-    @ManyToOne
-    @JoinColumn(name = "submit_id", nullable = false)
-    private Submit submit;
-    @Column(length = 4, nullable = false)
+public class ChatDTO {
+    private String id;
     private Integer chatNumber;
-    @Column(length = 2, nullable = false)
     private Integer codeNumber;
-    @Column(length = 8192, nullable = false)
     private String chatQuestion;
-    @Column(length = 8192, nullable = false)
     private String chatAnswer;
-    @Column(nullable = false)
     private LocalDateTime timestamp;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Integer getChatNumber() {
         return chatNumber;
@@ -55,27 +50,11 @@ public class Chat {
         this.chatAnswer = chatAnswer;
     }
 
-    public Long getChat_id() {
-        return chat_id;
-    }
-
-    public void setChat_id(Long chat_id) {
-        this.chat_id = chat_id;
-    }
-
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public Submit getSubmit() {
-        return submit;
-    }
-
-    public void setSubmit(Submit submit) {
-        this.submit = submit;
     }
 }
