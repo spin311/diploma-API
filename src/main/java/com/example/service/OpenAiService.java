@@ -1,14 +1,11 @@
 package com.example.service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 @Service
 public class OpenAiService {
@@ -18,10 +15,6 @@ public class OpenAiService {
         try{
             HttpURLConnection conn = getHttpConnectionForOpenAi(chatInput);
 
-            // Get response code
-            int responseCode = conn.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
-
             // Read response
             try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
                 String inputLine;
@@ -30,7 +23,7 @@ public class OpenAiService {
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
-                return response.toString();
+                return extractMessageFromJSONResponse(response.toString());
             }
 
         }
@@ -41,7 +34,7 @@ public class OpenAiService {
     }
 
     private static HttpURLConnection getHttpConnectionForOpenAi(String chatInput) throws IOException {
-        String apiKey = System.getenv("OPENAI_API_KEY");
+        String apiKey = getApiKey();
         URL url = new URL("https://api.openai.com/v1/chat/completions");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -50,13 +43,34 @@ public class OpenAiService {
         conn.setDoOutput(true);
         String jsonInputString = "{"
                 + "\"model\":\"gpt-3.5-turbo-0125\","
-                + "\"messages\":[{\"role\":\"user\",\"content\":\"" + chatInput.trim() + "\"}],"
+                + "\"messages\":[{\"role\":\"user\",\"content\":\"" + chatInput + "\"}],"
                 + "\"max_tokens\":150"
                 + "}";
-        try(OutputStream os = conn.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
+        try(OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
+            writer.write(jsonInputString);
+            writer.flush();
         }
         return conn;
+    }
+
+    public static String extractMessageFromJSONResponse(String response) {
+        int start = response.indexOf("content")+ 11;
+
+        int end = response.indexOf("\"", start);
+
+        return response.substring(start, end);
+
+    }
+
+    private static String getApiKey() {
+        try {
+        Dotenv dotenv = Dotenv.load();
+        return dotenv.get("OPENAI_API_KEY");
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
