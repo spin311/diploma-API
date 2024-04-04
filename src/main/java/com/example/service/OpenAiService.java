@@ -1,6 +1,8 @@
 package com.example.service;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -15,6 +17,18 @@ public class OpenAiService {
         try{
             HttpURLConnection conn = getHttpConnectionForOpenAi(chatInput);
 
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    return extractMessageFromJSONResponse(response.toString());
+                }
+            }
             // Read response
             try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
                 String inputLine;
@@ -41,13 +55,22 @@ public class OpenAiService {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Authorization", "Bearer " + apiKey);
         conn.setDoOutput(true);
-        String jsonInputString = "{"
-                + "\"model\":\"gpt-3.5-turbo-0125\","
-                + "\"messages\":[{\"role\":\"user\",\"content\":\"" + chatInput + "\"}],"
-                + "\"max_tokens\":150"
-                + "}";
+
+        // The request body
+        JSONObject message = new JSONObject();
+        message.put("role", "user");
+        message.put("content", chatInput);
+
+        JSONArray messages = new JSONArray();
+        messages.put(message);
+
+        JSONObject body = new JSONObject();
+        body.put("model", "gpt-3.5-turbo-0125");
+        body.put("messages", messages);
+        body.put("max_tokens", 150);
+
         try(OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
-            writer.write(jsonInputString);
+            writer.write(body.toString());
             writer.flush();
         }
         return conn;
