@@ -8,10 +8,6 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CHAT_SEQ")
     @SequenceGenerator(name = "CHAT_SEQ", sequenceName = "CHAT_SEQ", allocationSize = 1)
     private Long chat_id;
-
-    @ManyToOne
-    @JoinColumn(name = "submit_id", nullable = false)
-    private Submit submit;
     @Column(length = 4, nullable = false)
     private Integer chatNumber;
     @Column(length = 2, nullable = false)
@@ -69,13 +65,5 @@ public class Chat {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public Submit getSubmit() {
-        return submit;
-    }
-
-    public void setSubmit(Submit submit) {
-        this.submit = submit;
     }
 }

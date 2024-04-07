@@ -67,7 +67,7 @@ public class OpenAiService {
         JSONObject body = new JSONObject();
         body.put("model", "gpt-3.5-turbo-0125");
         body.put("messages", messages);
-        body.put("max_tokens", 150);
+        body.put("max_tokens", 50);
 
         try(OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
             writer.write(body.toString());

@@ -2,8 +2,6 @@ package com.example.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-
 @Entity
 public class Student {
     @Id

@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.ChatDTO;
 import com.example.dto.PythonLogRequestDTO;
 import com.example.dto.SubmitDTO;
+import com.example.dto.SubmitRequestDTO;
 import com.example.entity.Chat;
 import com.example.entity.Log;
 import com.example.entity.Student;
@@ -14,7 +15,9 @@ import com.example.repository.SubmitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -54,13 +57,18 @@ public class PythonCodeService {
 
     }
 
-    public String submitCode(SubmitDTO submitDTO) {
-        String guid = submitDTO.getId();
-        List<ChatDTO> chatList = submitDTO.getChatDTOList();
-        List<PythonLogRequestDTO> pythonLogRequestList = submitDTO.getPythonLogRequestDTOList();
+    public String submitCode(SubmitRequestDTO submitRequestDTO) {
+        PythonLogRequestDTO pythonLogRequestDTO = submitRequestDTO.getPythonLogRequestDTO();
+        String guid = pythonLogRequestDTO.getId();
+        SubmitDTO submitDTO = submitRequestDTO.getSubmitDTO();
+        List<ChatDTO> chatList = submitRequestDTO.getChatDTOList();
         try {
             Student student = studentRepository.findByGuid(guid);
-            saveSubmit(student, pythonLogRequestList, chatList);
+            saveSubmit(student, submitDTO);
+            saveLog(pythonLogRequestDTO, student, true);
+            for (ChatDTO chatDTO : chatList) {
+                saveChat(chatDTO);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return "Failed to submit code: " + e.getMessage();
@@ -68,23 +76,22 @@ public class PythonCodeService {
         return "Code submitted";
     }
 
-    private void saveSubmit(Student student, List<PythonLogRequestDTO> pythonLogRequestList, List<ChatDTO> chatList) {
+    private void saveSubmit(Student student, SubmitDTO submitDTO) {
         Submit submit = new Submit();
         submit.setStudent(student);
-        for (PythonLogRequestDTO pythonLogRequestDTO : pythonLogRequestList) {
-            saveLog(pythonLogRequestDTO, student, true);
-        }
-
-        for (ChatDTO chatDTO : chatList) {
-            saveChat(chatDTO, submit);
-        }
-        submit.setTimestamp(LocalDateTime.now());
+        submit.setCorrectCount(submitDTO.getCorrectCount());
+        submit.setTaskNumber(submitDTO.getTaskNumber());
+        submit.setErrorCount(submitDTO.getErrorCount());
+        submit.setSeconds(submitDTO.getSeconds());
+        submit.setStartTime(submitDTO.getStartTime());
+        submit.setEndTime(submitDTO.getEndTime());
+        submit.setTotalQuestions(submitDTO.getTotalQuestions());
         submitRepository.save(submit);
+
     }
 
-    private void saveChat(ChatDTO chatDTO, Submit submit) {
+    private void saveChat(ChatDTO chatDTO) {
         Chat chat = new Chat();
-        chat.setSubmit(submit);
         chat.setChatQuestion(chatDTO.getChatQuestion());
         chat.setChatAnswer(chatDTO.getChatAnswer());
         chat.setChatNumber(chatDTO.getChatNumber());

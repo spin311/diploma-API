@@ -1,5 +1,7 @@
 package com.example.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 
 public class ChatDTO {
@@ -8,6 +10,7 @@ public class ChatDTO {
     private Integer codeNumber;
     private String chatQuestion;
     private String chatAnswer;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime timestamp;
 
     public String getId() {
