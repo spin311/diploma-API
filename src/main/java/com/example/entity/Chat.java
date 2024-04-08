@@ -9,6 +9,10 @@ public class Chat {
     @SequenceGenerator(name = "CHAT_SEQ", sequenceName = "CHAT_SEQ", allocationSize = 1)
     private Long chat_id;
 
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
     @Column(length = 2, nullable = false)
     private Integer codeNumber;
 
@@ -24,9 +28,6 @@ public class Chat {
 
     @Column(length = 4, nullable = false)
     private Integer chatNumber;
-
-
-
 
     public Integer getChatNumber() {
         return chatNumber;
@@ -82,5 +83,13 @@ public class Chat {
 
     public void setCurrentTask(Integer currentTask) {
         this.currentTask = currentTask;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

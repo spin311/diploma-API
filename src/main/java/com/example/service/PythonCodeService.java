@@ -14,8 +14,6 @@ import com.example.repository.StudentRepository;
 import com.example.repository.SubmitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -66,7 +64,7 @@ public class PythonCodeService {
             saveSubmit(student, submitDTO, currentTask);
             saveLog(pythonLogRequestDTO, student, 2);
             for (ChatDTO chatDTO : chatList) {
-                saveChat(chatDTO, currentTask);
+                saveChat(chatDTO, student, currentTask);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,8 +89,9 @@ public class PythonCodeService {
 
     }
 
-    private void saveChat(ChatDTO chatDTO, Integer currentTask) {
+    private void saveChat(ChatDTO chatDTO, Student student, Integer currentTask) {
         Chat chat = new Chat();
+        chat.setStudent(student);
         chat.setChatQuestion(chatDTO.getChatQuestion());
         chat.setChatAnswer(chatDTO.getChatAnswer());
         chat.setChatNumber(chatDTO.getChatNumber());
