@@ -8,16 +8,25 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CHAT_SEQ")
     @SequenceGenerator(name = "CHAT_SEQ", sequenceName = "CHAT_SEQ", allocationSize = 1)
     private Long chat_id;
-    @Column(length = 4, nullable = false)
-    private Integer chatNumber;
+
     @Column(length = 2, nullable = false)
     private Integer codeNumber;
+
+    @Column(length = 2)
+    private Integer currentTask;
+
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
     @Column(length = 8192, nullable = false)
     private String chatQuestion;
     @Column(length = 8192, nullable = false)
     private String chatAnswer;
-    @Column(nullable = false)
-    private LocalDateTime timestamp;
+
+    @Column(length = 4, nullable = false)
+    private Integer chatNumber;
+
+
+
 
     public Integer getChatNumber() {
         return chatNumber;
@@ -65,5 +74,13 @@ public class Chat {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Integer getCurrentTask() {
+        return currentTask;
+    }
+
+    public void setCurrentTask(Integer currentTask) {
+        this.currentTask = currentTask;
     }
 }

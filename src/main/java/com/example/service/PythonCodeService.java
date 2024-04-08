@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -43,10 +41,10 @@ public class PythonCodeService {
         String guid = pythonLogRequestDTO.getId();
         String errorMessage = pythonLogRequestDTO.getErrorMessage();
         Integer taskNumber = pythonLogRequestDTO.getTaskNumber();
-
+        Integer submitType = pythonLogRequestDTO.getAutoSubmitted() ? 0 : 1;
         try {
             Student student = studentRepository.findByGuid(guid);
-            saveLog(pythonLogRequestDTO, student, false);
+            saveLog(pythonLogRequestDTO, student, submitType);
         } catch (Exception e) {
             e.printStackTrace();
             return String.format("Failed to save task %d with id %s and code %s: %s", taskNumber, guid, pythonCode, e.getMessage());
@@ -61,13 +59,14 @@ public class PythonCodeService {
         PythonLogRequestDTO pythonLogRequestDTO = submitRequestDTO.getPythonLogRequestDTO();
         String guid = pythonLogRequestDTO.getId();
         SubmitDTO submitDTO = submitRequestDTO.getSubmitDTO();
+        Integer currentTask = pythonLogRequestDTO.getCurrentTask();
         List<ChatDTO> chatList = submitRequestDTO.getChatDTOList();
         try {
             Student student = studentRepository.findByGuid(guid);
-            saveSubmit(student, submitDTO);
-            saveLog(pythonLogRequestDTO, student, true);
+            saveSubmit(student, submitDTO, currentTask);
+            saveLog(pythonLogRequestDTO, student, 2);
             for (ChatDTO chatDTO : chatList) {
-                saveChat(chatDTO);
+                saveChat(chatDTO, currentTask);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +75,7 @@ public class PythonCodeService {
         return "Code submitted";
     }
 
-    private void saveSubmit(Student student, SubmitDTO submitDTO) {
+    private void saveSubmit(Student student, SubmitDTO submitDTO, Integer currentTask) {
         Submit submit = new Submit();
         submit.setStudent(student);
         submit.setCorrectCount(submitDTO.getCorrectCount());
@@ -86,36 +85,35 @@ public class PythonCodeService {
         submit.setStartTime(submitDTO.getStartTime());
         submit.setEndTime(submitDTO.getEndTime());
         submit.setTotalQuestions(submitDTO.getTotalQuestions());
+        submit.setCurrentTask(currentTask);
+        submit.setSys_timestamp(TimezoneUtil.getUtcLocalDateTime());
         submitRepository.save(submit);
 
     }
 
-    private void saveChat(ChatDTO chatDTO) {
+    private void saveChat(ChatDTO chatDTO, Integer currentTask) {
         Chat chat = new Chat();
         chat.setChatQuestion(chatDTO.getChatQuestion());
         chat.setChatAnswer(chatDTO.getChatAnswer());
         chat.setChatNumber(chatDTO.getChatNumber());
         chat.setCodeNumber(chatDTO.getCodeNumber());
+        chat.setCurrentTask(currentTask);
         chat.setTimestamp(chatDTO.getTimestamp());
         chatRepository.save(chat);
     }
 
-    private void saveLog(PythonLogRequestDTO pythonLogRequestDTO, Student student, Boolean submitted) {
+    private void saveLog(PythonLogRequestDTO pythonLogRequestDTO, Student student, Integer submitType) {
         Log log = new Log();
         log.setCode(pythonLogRequestDTO.getPythonCode());
         log.setErrorMessage(pythonLogRequestDTO.getErrorMessage());
         log.setTaskNumber(pythonLogRequestDTO.getTaskNumber());
-        log.setSubmitted(submitted);
-        LocalDateTime utcLocalDateTime = getUtcLocalDateTime();
-        log.setTimestamp(utcLocalDateTime);
+        log.setSys_timestamp(TimezoneUtil.getUtcLocalDateTime());
+        log.setSubmitType(submitType);
+        log.setCurrentTask(pythonLogRequestDTO.getCurrentTask());
+        log.setTimestamp(pythonLogRequestDTO.getTimestamp());
         log.setStudent(student);
         logRepository.save(log);
     }
 
-    private static LocalDateTime getUtcLocalDateTime() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-        ZonedDateTime utcZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("UTC"));
-        return utcZonedDateTime.toLocalDateTime();
-    }
+
 }

@@ -2,6 +2,8 @@ package com.example.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Student {
     @Id
@@ -11,6 +13,9 @@ public class Student {
 
     @Column(length = 36, nullable = false, unique = true)
     private String guid;
+
+    @Column
+    private LocalDateTime sys_timestamp;
 
     public Long getStudent_id() {
         return student_id;
@@ -26,5 +31,13 @@ public class Student {
 
     public void setGuid(String guid) {
         this.guid = guid;
+    }
+
+    public LocalDateTime getSys_timestamp() {
+        return sys_timestamp;
+    }
+
+    public void setSys_timestamp(LocalDateTime sys_timestamp) {
+        this.sys_timestamp = sys_timestamp;
     }
 }

@@ -16,15 +16,22 @@ public class Log {
 
 @Column(length = 2, nullable = false)
     private Integer taskNumber;
+
+@Column(length = 2)
+    private Integer currentTask;
+
+@Column(nullable = false)
+    private LocalDateTime timestamp;
 @Column(length = 8192, nullable = false)
     private String code;
 @Column
     private String errorMessage;
-@Column(nullable = false)
-    private LocalDateTime timestamp;
 
 @Column
-private Boolean submitted;
+private Integer submitType;
+
+@Column
+private LocalDateTime sys_timestamp;
 
     public String getCode() {
         return code;
@@ -74,13 +81,27 @@ private Boolean submitted;
         this.student = student;
     }
 
-    public Boolean getSubmitted() {
-        return submitted;
+    public Integer getSubmitType() {
+        return submitType;
     }
 
-    public void setSubmitted(Boolean submitted) {
-        this.submitted = submitted;
+    public void setSubmitType(Integer submitType) {
+        this.submitType = submitType;
     }
 
+    public LocalDateTime getSys_timestamp() {
+        return sys_timestamp;
+    }
 
+    public void setSys_timestamp(LocalDateTime sys_timestamp) {
+        this.sys_timestamp = sys_timestamp;
+    }
+
+    public Integer getCurrentTask() {
+        return currentTask;
+    }
+
+    public void setCurrentTask(Integer currentTask) {
+        this.currentTask = currentTask;
+    }
 }

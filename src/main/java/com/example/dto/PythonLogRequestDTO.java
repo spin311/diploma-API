@@ -1,10 +1,19 @@
 package com.example.dto;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
+
 public class PythonLogRequestDTO {
     private String id;
     private String pythonCode;
     private String errorMessage;
     private Integer taskNumber;
+    private Boolean autoSubmitted;
+
+    private Integer currentTask;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime timestamp;
 
     public String getId() {
         return id;
@@ -36,5 +45,29 @@ public class PythonLogRequestDTO {
 
     public void setTaskNumber(Integer taskNumber) {
         this.taskNumber = taskNumber;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Boolean getAutoSubmitted() {
+        return autoSubmitted;
+    }
+
+    public void setAutoSubmitted(Boolean autoSubmitted) {
+        this.autoSubmitted = autoSubmitted;
+    }
+
+    public Integer getCurrentTask() {
+        return currentTask;
+    }
+
+    public void setCurrentTask(Integer currentTask) {
+        this.currentTask = currentTask;
     }
 }

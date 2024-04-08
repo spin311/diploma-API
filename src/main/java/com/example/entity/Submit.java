@@ -31,6 +31,12 @@ public class Submit {
     @Column(nullable = false)
     private Integer totalQuestions;
 
+    @Column(length = 2)
+    private Integer currentTask;
+
+    @Column
+    private LocalDateTime sys_timestamp;
+
     public Long getSubmit_id() {
         return submit_id;
     }
@@ -101,5 +107,21 @@ public class Submit {
 
     public void setTaskNumber(Integer taskNumber) {
         this.taskNumber = taskNumber;
+    }
+
+    public LocalDateTime getSys_timestamp() {
+        return sys_timestamp;
+    }
+
+    public void setSys_timestamp(LocalDateTime sys_timestamp) {
+        this.sys_timestamp = sys_timestamp;
+    }
+
+    public Integer getCurrentTask() {
+        return currentTask;
+    }
+
+    public void setCurrentTask(Integer currentTask) {
+        this.currentTask = currentTask;
     }
 }

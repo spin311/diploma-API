@@ -12,6 +12,8 @@ import java.net.URL;
 @Service
 public class OpenAiService {
 
+    public static final Integer MAX_TOKENS = 50;
+
     public String getOpenAiChat(String chatInput) {
 
         try{
@@ -67,7 +69,7 @@ public class OpenAiService {
         JSONObject body = new JSONObject();
         body.put("model", "gpt-3.5-turbo-0125");
         body.put("messages", messages);
-        body.put("max_tokens", 50);
+        body.put("max_tokens", MAX_TOKENS);
 
         try(OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream())) {
             writer.write(body.toString());
@@ -77,11 +79,11 @@ public class OpenAiService {
     }
 
     public static String extractMessageFromJSONResponse(String response) {
-        int start = response.indexOf("content")+ 11;
-
-        int end = response.indexOf("\"", start);
-
-        return response.substring(start, end);
+        JSONObject jsonResponse = new JSONObject(response);
+        JSONArray choices = jsonResponse.getJSONArray("choices");
+        JSONObject firstChoice = choices.getJSONObject(0);
+        JSONObject message = firstChoice.getJSONObject("message");
+        return message.getString("content");
 
     }
 

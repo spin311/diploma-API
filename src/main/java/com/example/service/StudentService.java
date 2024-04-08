@@ -5,6 +5,7 @@ import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -34,6 +35,7 @@ public class StudentService {
         try {
             Student student = new Student();
             student.setGuid(guid);
+            student.setSys_timestamp(LocalDateTime.now());
             studentRepository.save(student);
         } catch (Exception e) {
             return false;
