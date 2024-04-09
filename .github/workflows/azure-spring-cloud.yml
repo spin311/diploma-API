@@ -2,7 +2,7 @@ name: AzureSpringCloud
 on: push
 env:
   ASC_PACKAGE_PATH: ${{ github.workspace }}
-  JAVA_VERSION: 17
+  JAVA_VERSION: 11
   AZURE_SUBSCRIPTION: 81a958ce-9c53-4368-bddc-a31c3ce579f5
 
 jobs:
@@ -13,8 +13,8 @@ jobs:
       - name: Checkout Github Action
         uses: actions/checkout@v2
 
-      - name: Set up JDK ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v1
+      - name: Set up Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JAVA_VERSION }}
 
