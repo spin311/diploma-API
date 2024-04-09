@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Github Action
         uses: actions/checkout@v2
 
-      - name: Set up Java ${{ env.JAVA_VERSION }}
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JAVA_VERSION }}
